@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Tracklist to Spotify",
   "scripts": {
-    "start": "gulp"
+    "start": "gulp",
+    "test": "gulp test"
   },
   "author": "Harmen Janssen",
   "license": "CC0-1.0",
@@ -16,6 +17,7 @@
     "gulp": "^3.9.0",
     "gulp-load-plugins": "^1.0.0-rc.1",
     "gulp-minify-css": "^1.2.1",
+    "gulp-mocha": "^2.2.0",
     "gulp-plumber": "^1.0.1",
     "gulp-postcss": "^6.0.1",
     "gulp-sass": "^2.0.4",
@@ -30,6 +32,7 @@
     "watchify": "^3.4.0"
   },
   "dependencies": {
-    "ramda": "^0.17.1"
+    "ramda": "^0.17.1",
+    "spotify-web-api-js": "^0.15.0"
   }
 }

@@ -1,38 +1,57 @@
-var createBtn = document.querySelector('.create-playlists-btn');
-var tracklistTxt = document.querySelector('.tracklist-txt');
+let createBtn = document.querySelector('.create-playlists-btn');
+let tracklistTxt = document.querySelector('.tracklist-txt');
 
-var getSpotifyEmbedRootUrl = function() {
+const getSpotifyEmbedRootUrl = function() {
 	return 'https://embed.spotify.com/' +
 		'?theme=dark&view=list&uri=spotify:trackset:tracklister:';
 };
 
-var getSpotifyEmbedUrl = function(trackIds) {
+const getSpotifyEmbedUrl = function(trackIds) {
 	return getSpotifyEmbedRootUrl() +
 		trackIds.join(',');
 };
 
-var getTracklist = function(sourceElm) {
-	return sourceElm.value.split("\n").filter(Boolean);
+const getTracklist = function(sourceElm) {
+	return sourceElm.value.split("\n");
 };
 
-var parseTracklist = function(tracks) {
+const tracklistLooksLikeAList = function(tracks) {
+	return tracks.filter(track => /^\d+\./.test(track)).length === tracks.length;
+};
+
+const extractArtistAndTrack = function(track) {
+
+
+	return track;
+};
+
+const grabTrackIdsFromSpotify = function(tracks) {
+	return Promise.resolve(tracks);
+};
+
+const parseTracklist = function(tracks) {
+	return grabTrackIdsFromSpotify(
+		tracks.map(extractArtistAndTrack));
+};
+
+const createEmbed = function(tracks) {
 	console.log(tracks);
-	return tracks;
-};
-
-var createEmbed = function(tracks) {
-  	var out = '<iframe src="' + getSpotifyEmbedUrl(tracks) + '" frameborder="0"';
-  	out += 'allowtransparency="true" width="640" height="720"></iframe>';
+	if (10> 9){
+		return '';
+	}
+  	let out = `<iframe src="${getSpotifyEmbedUrl(tracks)}" frameborder="0"
+  		allowtransparency="true" width="640" height="720"></iframe>`;
 	return out;
 };
 
-var createPlaylist = function(sourceElm) {
+const createPlaylist = function(sourceElm) {
 	return (e) => {
 		e.preventDefault();
-		var iframe = createEmbed(
-			parseTracklist(
-				getTracklist(sourceElm)));
-		document.querySelector('#embed-container').innerHTML = iframe;
+		parseTracklist(
+			getTracklist(sourceElm)).then(tracks => {
+				let iframe = createEmbed(tracks);
+				document.querySelector('#embed-container').innerHTML = iframe;
+			});
 	};
 };
 

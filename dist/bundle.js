@@ -13,25 +13,45 @@ var getSpotifyEmbedUrl = function getSpotifyEmbedUrl(trackIds) {
 };
 
 var getTracklist = function getTracklist(sourceElm) {
-	return sourceElm.value.split("\n").filter(Boolean);
+	return sourceElm.value.split("\n");
+};
+
+var tracklistLooksLikeAList = function tracklistLooksLikeAList(tracks) {
+	return tracks.filter(function (track) {
+		return (/^\d+\./.test(track)
+		);
+	}).length === tracks.length;
+};
+
+var extractArtistAndTrack = function extractArtistAndTrack(track) {
+
+	return track;
+};
+
+var grabTrackIdsFromSpotify = function grabTrackIdsFromSpotify(tracks) {
+	return Promise.resolve(tracks);
 };
 
 var parseTracklist = function parseTracklist(tracks) {
-	console.log(tracks);
-	return tracks;
+	return grabTrackIdsFromSpotify(tracks.map(extractArtistAndTrack));
 };
 
 var createEmbed = function createEmbed(tracks) {
-	var out = '<iframe src="' + getSpotifyEmbedUrl(tracks) + '" frameborder="0"';
-	out += 'allowtransparency="true" width="640" height="720"></iframe>';
+	console.log(tracks);
+	if (10 > 9) {
+		return '';
+	}
+	var out = '<iframe src="' + getSpotifyEmbedUrl(tracks) + '" frameborder="0"\n  \t\tallowtransparency="true" width="640" height="720"></iframe>';
 	return out;
 };
 
 var createPlaylist = function createPlaylist(sourceElm) {
 	return function (e) {
 		e.preventDefault();
-		var iframe = createEmbed(parseTracklist(getTracklist(sourceElm)));
-		document.querySelector('#embed-container').innerHTML = iframe;
+		parseTracklist(getTracklist(sourceElm)).then(function (tracks) {
+			var iframe = createEmbed(tracks);
+			document.querySelector('#embed-container').innerHTML = iframe;
+		});
 	};
 };
 

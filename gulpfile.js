@@ -8,7 +8,8 @@ var gulp            = require('gulp'),
     buffer          = require('vinyl-buffer'),
     assign          = require('lodash.assign'),
     del             = require('del'),
-    sync            = require('browser-sync');
+    sync            = require('browser-sync'),
+    mocha           = require('gulp-mocha');
 
 gulp.task('default', ['clean', 'html', 'sync', 'css'], function () {
     gulp.watch('./scss/*.scss', ['css']);
@@ -52,6 +53,12 @@ gulp.task('sync', ['js'], function() {
 });
 
 gulp.task('js', bundle);
+
+gulp.task('test', function() {
+	return gulp.src('tests/**/*.js', {read: false})
+		// gulp-mocha needs filepaths so you can't have any plugins before it
+		.pipe(mocha({reporter: 'nyan'}));
+});
 
 var customOpts = {
     entries: ['./js/app.js'],
