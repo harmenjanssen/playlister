@@ -1,8 +1,35 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+var tracklister = require('./tracklister.js');
 var createBtn = document.querySelector('.create-playlists-btn');
 var tracklistTxt = document.querySelector('.tracklist-txt');
+
+createBtn.addEventListener('click', tracklister.createPlaylist(tracklistTxt));
+
+/*
+
+		url +=
+		trackI
+			if (!song.tracks.length) {
+				return;
+			}
+			var foreignIdField = 'foreign_id';
+			var track1 = song.tracks[0][foreignIdField];
+			var bits = track1.split(':');
+			var songId = bits[bits.length-1];
+			url += songId;
+			if (index < $scope.songs.length - 1) {
+				url += ',';
+			}
+		});
+		return url;
+	}
+
+   */
+
+},{"./tracklister.js":2}],2:[function(require,module,exports){
+'use strict';
 
 var getSpotifyEmbedRootUrl = function getSpotifyEmbedRootUrl() {
 	return 'https://embed.spotify.com/' + '?theme=dark&view=list&uri=spotify:trackset:tracklister:';
@@ -55,28 +82,12 @@ var createPlaylist = function createPlaylist(sourceElm) {
 	};
 };
 
-createBtn.addEventListener('click', createPlaylist(tracklistTxt));
-
-/*
-
-		url +=
-		trackI
-			if (!song.tracks.length) {
-				return;
-			}
-			var foreignIdField = 'foreign_id';
-			var track1 = song.tracks[0][foreignIdField];
-			var bits = track1.split(':');
-			var songId = bits[bits.length-1];
-			url += songId;
-			if (index < $scope.songs.length - 1) {
-				url += ',';
-			}
-		});
-		return url;
-	}
-
-   */
+// Export public entry point but also a couple of methods that need unit tests.
+module.exports = {
+	createPlaylist: createPlaylist,
+	extractArtistAndTrack: extractArtistAndTrack,
+	tracklistLooksLikeAList: tracklistLooksLikeAList
+};
 
 },{}]},{},[1])
 

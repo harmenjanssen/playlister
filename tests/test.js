@@ -1,16 +1,14 @@
-require('../js/app.js');
+'use strict';
+const tracklister = require('../js/tracklister.js');
+const test = require('tape');
 
-var assert = require('assert');
-var setup = require('mocha').setup;
+test('Tracklister', function(assert) {
+	const numberedList = ['1. Banana', '2. Cookies', '3. Pudding'];
+	const numberedListWithLeadingZeroes = ['01. Banana', '02. Cookies', '03. Pudding'];
+	assert.plan(2);
+	assert.ok(tracklister.tracklistLooksLikeAList(numberedList),
+			  'It should recognize a numbered tracklist');
 
-describe('Tracklister', function() {
-	describe('tracklistLooksLikeAList', function() {
-		it('should recognize a numbered list', function() {
-			var numberedList = ['01. Banana', '02. Cookies', '03. Pudding'];
-			assert(tracklistLooksLikeAList(numberedList));
-		});
-	});
-	describe('extractArtistAndTrack', function() {
-	});
-
+	assert.ok(tracklister.tracklistLooksLikeAList(numberedListWithLeadingZeroes),
+	 			'It should recognize a numbered tracklist with leading zeroes');
 });
