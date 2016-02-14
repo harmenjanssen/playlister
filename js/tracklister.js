@@ -1,4 +1,6 @@
 'use strict';
+const R = require('ramda');
+
 const getSpotifyEmbedRootUrl = function() {
 	return 'https://embed.spotify.com/' +
 		'?theme=dark&view=list&uri=spotify:trackset:tracklister:';
@@ -9,27 +11,22 @@ const getSpotifyEmbedUrl = function(trackIds) {
 		trackIds.join(',');
 };
 
-const getTracklist = function(sourceElm) {
-	return sourceElm.value.split("\n");
-};
+const getTracknumberingRegexp = () => { return /^\[?\d+(\.|\])?/; };
 
 const tracklistLooksLikeAList = function(tracks) {
-	return tracks.filter(track => /^\d+\./.test(track)).length === tracks.length;
+	return R.filter(track => getTracknumberingRegexp().test(track), tracks).length ===
+		tracks.length;
 };
 
 const extractArtistAndTrack = function(track) {
-
-
-	return track;
+	let trackObj = R.map(R.compose(R.trim, R.replace(getTracknumberingRegexp(), '')),
+						 R.split('-', track));
+	trackObj = R.zipObj(['artist', 'track'], trackObj);
+	return trackObj;
 };
 
 const grabTrackIdsFromSpotify = function(tracks) {
 	return Promise.resolve(tracks);
-};
-
-const parseTracklist = function(tracks) {
-	return grabTrackIdsFromSpotify(
-		tracks.map(extractArtistAndTrack));
 };
 
 const createEmbed = function(tracks) {
@@ -42,20 +39,14 @@ const createEmbed = function(tracks) {
 	return out;
 };
 
-const createPlaylist = function(sourceElm) {
-	return (e) => {
-		e.preventDefault();
-		parseTracklist(
-			getTracklist(sourceElm)).then(tracks => {
-				let iframe = createEmbed(tracks);
-				document.querySelector('#embed-container').innerHTML = iframe;
-			});
-	};
-};
+const parseTracklist = R.compose(grabTrackIdsFromSpotify, R.map(extractArtistAndTrack));
+const getTracklist   = R.compose(R.split("\n"), R.prop('value'));
+const createPlaylist = R.compose(parseTracklist, getTracklist);
 
 // Export public entry point but also a couple of methods that need unit tests.
 module.exports = {
 	createPlaylist,
+	createEmbed,
 	extractArtistAndTrack,
 	tracklistLooksLikeAList
 };
