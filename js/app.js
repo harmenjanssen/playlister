@@ -32,3 +32,25 @@ createBtn.addEventListener('click', e => {
 	}
 
    */
+console.log(`
+Jay Dee - Rico Suave
+Roy Ayers - Life Is Just A Moment
+Bahamadia - Funky 4 U (Jay Dee Remix)
+Tall Black Guy - Al Greens Dream
+Dam Funk - Live From Free Kutmah Show In L.A
+Afrika Bambaataa + James Brown - Unity (Georgia Anne Muldrow Remix)
+Shash'u - Boogie Buster [Hit And Run - Forthcoming]
+Seven Davis Jr - Feel High [Izwid - Forthcoming]
+Sa-Ra - Feel The Bass
+DJ Sliink - Stop Me Now
+Trim - Trousers
+Dubbel Dutch - Madloopz
+Eprom - Dirty Diamonds
+Flako Exclusive Shit! ?
+Digital Mystikz - Anti War Dub (Black Lite Juke Edit)
+Jo-Def - Took It Thuur
+Biggie - Hypnotise (Shash'u Remix)
+Marvin Gaye - Sexual Healing (Obol Remix)
+Flying Lotus - Raise It Up
+Jaylib - The Red
+`)

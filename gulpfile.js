@@ -8,8 +8,7 @@ var gulp            = require('gulp'),
     buffer          = require('vinyl-buffer'),
     assign          = require('lodash.assign'),
     del             = require('del'),
-    sync            = require('browser-sync'),
-    mocha           = require('gulp-mocha');
+    sync            = require('browser-sync');
 
 gulp.task('default', ['clean', 'html', 'sync', 'css'], function () {
     gulp.watch('./scss/*.scss', ['css']);

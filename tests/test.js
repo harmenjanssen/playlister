@@ -43,5 +43,13 @@ test('tracklister.extractArtistAndTrack', function(assert) {
 					  trackFixture,
 					  'It should seriously ignore all track numbers');
 
+	assert.deepEquals(tracklister.extractArtistAndTrack('Miles Davis - Freddie Freeloader [Blue Note]'),
+					  trackFixture,
+					  'It should strip off anything trailing in brackets');
+
+	assert.deepEquals(tracklister.extractArtistAndTrack('Miles Davis - Freddie Freeloader (Blue Note, 1959)'),
+					  trackFixture,
+					  'It should strip off anything trailing in parentheses');
+
 	assert.end();
 });

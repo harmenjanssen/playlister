@@ -1,5 +1,7 @@
 'use strict';
 const R = require('ramda');
+const Spotify = require('spotify-web-api-js');
+let spotifyApi = new Spotify();
 
 const getSpotifyEmbedRootUrl = function() {
 	return 'https://embed.spotify.com/' +
@@ -11,35 +13,46 @@ const getSpotifyEmbedUrl = function(trackIds) {
 		trackIds.join(',');
 };
 
-const getTracknumberingRegexp = () => { return /^\[?\d+(\.|\])?/; };
+const getTracknumberingRegexp = () => /^\[?\d+(\.|\])?/;
+const getSuffixRegexp = () => /(\(|\[)([^\)\]]+)(\)|\])$/;
 
 const tracklistLooksLikeAList = function(tracks) {
 	return R.filter(track => getTracknumberingRegexp().test(track), tracks).length ===
 		tracks.length;
 };
 
+const removeCruftFromTrack = R.compose(R.trim,
+									   R.replace(getSuffixRegexp(), ''),
+									   R.replace(getTracknumberingRegexp(), ''));
+
 const extractArtistAndTrack = function(track) {
-	let trackObj = R.map(R.compose(R.trim, R.replace(getTracknumberingRegexp(), '')),
+	let trackObj = R.map(removeCruftFromTrack(),
 						 R.split('-', track));
 	trackObj = R.zipObj(['artist', 'track'], trackObj);
 	return trackObj;
 };
 
+const cleanupTrack = R.map(removeCruftFromTrack);
+
 const grabTrackIdsFromSpotify = function(tracks) {
-	return Promise.resolve(tracks);
+	return Promise.all(tracks.map(spotifyApi.searchTracks))
+		.then(R.filter(track => track.tracks.items.length))
+		.then(R.map(R.compose(R.prop('items'), R.prop('tracks'))))
+		// somewhere around here: sort 'items' by literal match
+		.then(R.map(R.compose(R.prop('id'), R.head)))
 };
 
-const createEmbed = function(tracks) {
-	console.log(tracks);
-	if (10> 9){
-		return '';
-	}
-  	let out = `<iframe src="${getSpotifyEmbedUrl(tracks)}" frameborder="0"
+const createEmbed = function(tracksIds) {
+	//let trackIds = R.map(track => track, R.filter(track => track.tracks.items.length, tracks));
+  	let out = `<iframe src="${getSpotifyEmbedUrl(tracksIds)}" frameborder="0"
   		allowtransparency="true" width="640" height="720"></iframe>`;
 	return out;
 };
 
-const parseTracklist = R.compose(grabTrackIdsFromSpotify, R.map(extractArtistAndTrack));
+const parseTracklist = R.compose(grabTrackIdsFromSpotify,
+								 R.map(removeCruftFromTrack),
+								 R.filter(Boolean));
+
 const getTracklist   = R.compose(R.split("\n"), R.prop('value'));
 const createPlaylist = R.compose(parseTracklist, getTracklist);
 
