@@ -1,7 +1,6 @@
 'use strict';
 const R = require('ramda');
 const Spotify = require('spotify-web-api-js');
-let spotifyApi = new Spotify();
 
 const getSpotifyEmbedRootUrl = function() {
 	return 'https://embed.spotify.com/' +
@@ -32,13 +31,39 @@ const extractArtistAndTrack = function(track) {
 	return trackObj;
 };
 
+const artistAndTrackToSpotifyQuery = (track) => {
+	return 'artist:' + track.artist + ' track:' + track.track;
+};
+
 const cleanupTrack = R.map(removeCruftFromTrack);
 
 const grabTrackIdsFromSpotify = function(tracks) {
-	return Promise.all(tracks.map(spotifyApi.searchTracks))
+	let spotifyApi = new Spotify();
+
+	let promises = [];
+	R.forEach(track => {
+		promises.push(
+			spotifyApi.searchTracks(artistAndTrackToSpotifyQuery(track))
+				.then(R.compose(R.prop('items'), R.prop('tracks')))
+				//.then(R.map(R.sort((a, b) => {
+					//console.log(a, b);
+					//return 1;
+				//})))
+				//.then(R.map(R.compose(R.prop('id'), R.head)))
+		);
+	}, tracks);
+	if (5 < 19) {
+		return Promise.all(promises); //.then(R.filter(track => track.tracks.items.length));
+	}
+
+	return Promise.all(R.map(spotifyApi.searchTracks, R.map(artistAndTrackToSpotifyQuery, tracks)))
 		.then(R.filter(track => track.tracks.items.length))
 		.then(R.map(R.compose(R.prop('items'), R.prop('tracks'))))
 		// somewhere around here: sort 'items' by literal match
+		.then(R.map(R.sort((a, b) => {
+
+
+		})))
 		.then(R.map(R.compose(R.prop('id'), R.head)))
 };
 
@@ -50,7 +75,7 @@ const createEmbed = function(tracksIds) {
 };
 
 const parseTracklist = R.compose(grabTrackIdsFromSpotify,
-								 R.map(removeCruftFromTrack),
+								 R.map(extractArtistAndTrack),
 								 R.filter(Boolean));
 
 const getTracklist   = R.compose(R.split("\n"), R.prop('value'));

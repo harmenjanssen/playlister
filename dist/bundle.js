@@ -8,6 +8,7 @@ var tracklistTxt = document.querySelector('.tracklist-txt');
 createBtn.addEventListener('click', function (e) {
 	e.preventDefault();
 	tracklister.createPlaylist(tracklistTxt).then(function (tracks) {
+		console.log(tracks);
 		var iframe = tracklister.createEmbed(tracks);
 		document.querySelector('#embed-container').innerHTML = iframe;
 	});
@@ -39,7 +40,6 @@ console.log('\nJay Dee - Rico Suave\nRoy Ayers - Life Is Just A Moment\nBahamadi
 'use strict';
 var R = require('ramda');
 var Spotify = require('spotify-web-api-js');
-var spotifyApi = new Spotify();
 
 var getSpotifyEmbedRootUrl = function getSpotifyEmbedRootUrl() {
 	return 'https://embed.spotify.com/' + '?theme=dark&view=list&uri=spotify:trackset:tracklister:';
@@ -72,14 +72,34 @@ var extractArtistAndTrack = function extractArtistAndTrack(track) {
 	return trackObj;
 };
 
+var artistAndTrackToSpotifyQuery = function artistAndTrackToSpotifyQuery(track) {
+	return 'artist:' + track.artist + ' track:' + track.track;
+};
+
 var cleanupTrack = R.map(removeCruftFromTrack);
 
 var grabTrackIdsFromSpotify = function grabTrackIdsFromSpotify(tracks) {
-	return Promise.all(tracks.map(spotifyApi.searchTracks)).then(R.filter(function (track) {
+	var spotifyApi = new Spotify();
+
+	var promises = [];
+	R.forEach(function (track) {
+		promises.push(spotifyApi.searchTracks(artistAndTrackToSpotifyQuery(track)).then(R.compose(R.prop('items'), R.prop('tracks')))
+		//.then(R.map(R.sort((a, b) => {
+		//console.log(a, b);
+		//return 1;
+		//})))
+		//.then(R.map(R.compose(R.prop('id'), R.head)))
+		);
+	}, tracks);
+	if (5 < 19) {
+		return Promise.all(promises); //.then(R.filter(track => track.tracks.items.length));
+	}
+
+	return Promise.all(R.map(spotifyApi.searchTracks, R.map(artistAndTrackToSpotifyQuery, tracks))).then(R.filter(function (track) {
 		return track.tracks.items.length;
 	})).then(R.map(R.compose(R.prop('items'), R.prop('tracks'))))
 	// somewhere around here: sort 'items' by literal match
-	.then(R.map(R.compose(R.prop('id'), R.head)));
+	.then(R.map(R.sort(function (a, b) {}))).then(R.map(R.compose(R.prop('id'), R.head)));
 };
 
 var createEmbed = function createEmbed(tracksIds) {
@@ -88,7 +108,7 @@ var createEmbed = function createEmbed(tracksIds) {
 	return out;
 };
 
-var parseTracklist = R.compose(grabTrackIdsFromSpotify, R.map(removeCruftFromTrack), R.filter(Boolean));
+var parseTracklist = R.compose(grabTrackIdsFromSpotify, R.map(extractArtistAndTrack), R.filter(Boolean));
 
 var getTracklist = R.compose(R.split("\n"), R.prop('value'));
 var createPlaylist = R.compose(parseTracklist, getTracklist);
