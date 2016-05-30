@@ -37,6 +37,12 @@ const artistAndTrackToSpotifyQuery = (track) => {
 
 const cleanupTrack = R.map(removeCruftFromTrack);
 
+const findLiteralMatch = (query, trackResult) => {
+  let findLiteral = R.and(R.propEq('name', query.track),
+                     R.contains(query.artist, trackResult.artists))
+  return R.findIndex(findLiteral, trackResult);
+};
+
 const grabTrackIdsFromSpotify = function(tracks) {
 	let spotifyApi = new Spotify();
 
@@ -45,10 +51,11 @@ const grabTrackIdsFromSpotify = function(tracks) {
 		promises.push(
 			spotifyApi.searchTracks(artistAndTrackToSpotifyQuery(track))
 				.then(R.compose(R.prop('items'), R.prop('tracks')))
-				//.then(R.map(R.sort((a, b) => {
-					//console.log(a, b);
-					//return 1;
-				//})))
+        .then(R.sort((a, b) => {
+          // Sort literal matches on top
+          return undefined === findLiteralMatch(track, a) ? -1 :
+            undefined === findLiteralMatch(track, b) ? 1 : 0;
+        }))
 		);
 	}, tracks);
 	if (5 < 19) {
