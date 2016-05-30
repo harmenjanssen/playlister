@@ -32,7 +32,7 @@ const extractArtistAndTrack = function(track) {
 };
 
 const artistAndTrackToSpotifyQuery = (track) => {
-	return 'artist:' + track.artist + ' track:' + track.track;
+	return `artist:${track.artist} track:${track.track}`;
 };
 
 const cleanupTrack = R.map(removeCruftFromTrack);
@@ -49,11 +49,10 @@ const grabTrackIdsFromSpotify = function(tracks) {
 					//console.log(a, b);
 					//return 1;
 				//})))
-				//.then(R.map(R.compose(R.prop('id'), R.head)))
 		);
 	}, tracks);
 	if (5 < 19) {
-		return Promise.all(promises); //.then(R.filter(track => track.tracks.items.length));
+		return Promise.all(promises).then(R.filter(R.length))
 	}
 
 	return Promise.all(R.map(spotifyApi.searchTracks, R.map(artistAndTrackToSpotifyQuery, tracks)))
@@ -67,9 +66,9 @@ const grabTrackIdsFromSpotify = function(tracks) {
 		.then(R.map(R.compose(R.prop('id'), R.head)))
 };
 
-const createEmbed = function(tracksIds) {
-	//let trackIds = R.map(track => track, R.filter(track => track.tracks.items.length, tracks));
-  	let out = `<iframe src="${getSpotifyEmbedUrl(tracksIds)}" frameborder="0"
+const createEmbed = function(tracks) {
+	let trackIds = R.map(R.compose(R.prop('id'), R.head), tracks);
+  let out = `<iframe src="${getSpotifyEmbedUrl(trackIds)}" frameborder="0"
   		allowtransparency="true" width="640" height="720"></iframe>`;
 	return out;
 };

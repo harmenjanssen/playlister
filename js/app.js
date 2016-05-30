@@ -6,7 +6,7 @@ createBtn.addEventListener('click', e => {
 	e.preventDefault();
 	tracklister.createPlaylist(tracklistTxt)
 		.then(tracks => {
-			console.log(tracks);
+			//console.log(tracks);
 			let iframe = tracklister.createEmbed(tracks);
 			document.querySelector('#embed-container').innerHTML = iframe;
 		});

@@ -8,7 +8,7 @@ var tracklistTxt = document.querySelector('.tracklist-txt');
 createBtn.addEventListener('click', function (e) {
 	e.preventDefault();
 	tracklister.createPlaylist(tracklistTxt).then(function (tracks) {
-		console.log(tracks);
+		//console.log(tracks);
 		var iframe = tracklister.createEmbed(tracks);
 		document.querySelector('#embed-container').innerHTML = iframe;
 	});
@@ -88,11 +88,10 @@ var grabTrackIdsFromSpotify = function grabTrackIdsFromSpotify(tracks) {
 		//console.log(a, b);
 		//return 1;
 		//})))
-		//.then(R.map(R.compose(R.prop('id'), R.head)))
 		);
 	}, tracks);
 	if (5 < 19) {
-		return Promise.all(promises); //.then(R.filter(track => track.tracks.items.length));
+		return Promise.all(promises).then(R.filter(R.length));
 	}
 
 	return Promise.all(R.map(spotifyApi.searchTracks, R.map(artistAndTrackToSpotifyQuery, tracks))).then(R.filter(function (track) {
@@ -102,9 +101,9 @@ var grabTrackIdsFromSpotify = function grabTrackIdsFromSpotify(tracks) {
 	.then(R.map(R.sort(function (a, b) {}))).then(R.map(R.compose(R.prop('id'), R.head)));
 };
 
-var createEmbed = function createEmbed(tracksIds) {
-	//let trackIds = R.map(track => track, R.filter(track => track.tracks.items.length, tracks));
-	var out = '<iframe src="' + getSpotifyEmbedUrl(tracksIds) + '" frameborder="0"\n  \t\tallowtransparency="true" width="640" height="720"></iframe>';
+var createEmbed = function createEmbed(tracks) {
+	var trackIds = R.map(R.compose(R.prop('id'), R.head), tracks);
+	var out = '<iframe src="' + getSpotifyEmbedUrl(trackIds) + '" frameborder="0"\n  \t\tallowtransparency="true" width="640" height="720"></iframe>';
 	return out;
 };
 
