@@ -51,5 +51,9 @@ test('tracklister.extractArtistAndTrack', function(assert) {
 					  trackFixture,
 					  'It should strip off anything trailing in parentheses');
 
+  let saRaFixture = { artist: 'Sa-Ra Creative Partners', track: 'Cosmic Ball' };
+  assert.deepEquals(tracklister.extractArtistAndTrack('Sa-Ra Creative Partners - Cosmic Ball'),
+                    saRaFixture, 'It should somehow recognize artists containing dashes');
+
 	assert.end();
 });
