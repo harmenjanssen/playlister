@@ -41,9 +41,7 @@ var getLastDashRegexp = function getLastDashRegexp() {
 };
 
 var tracklistLooksLikeAList = function tracklistLooksLikeAList(tracks) {
-  return R.filter(function (track) {
-    return getTracknumberingRegexp().test(track);
-  }, tracks).length === tracks.length;
+  return R.filter(R.test(getTracknumberingRegexp()), tracks).length === tracks.length;
 };
 
 var removeCruftFromTrack = R.compose(R.trim, R.replace(getSuffixRegexp(), ''), R.replace(getLastDashRegexp(), ''), R.replace(getTracknumberingRegexp(), ''));
@@ -76,29 +74,27 @@ var grabTrackIdsFromSpotify = function grabTrackIdsFromSpotify(tracks) {
       return undefined === findLiteralMatch(track, a) ? -1 : undefined === findLiteralMatch(track, b) ? 1 : 0;
     })));
   }, tracks);
-  if (5 < 19) {
-    return Promise.all(promises).then(R.filter(R.length));
-  }
-
-  return Promise.all(R.map(spotifyApi.searchTracks, R.map(artistAndTrackToSpotifyQuery, tracks))).then(R.filter(function (track) {
-    return track.tracks.items.length;
-  })).then(R.map(R.compose(R.prop('items'), R.prop('tracks'))))
-  // somewhere around here: sort 'items' by literal match
-  .then(R.map(R.sort(function (a, b) {}))).then(R.map(R.compose(R.prop('id'), R.head)));
+  return Promise.all(promises).then(R.filter(R.length));
 };
 
+var parseTracklist = R.compose(grabTrackIdsFromSpotify, R.map(extractArtistAndTrack), R.filter(Boolean));
+
+var getTracklist = R.compose(R.split("\n"), R.prop('value'));
+
+/**
+ * Main API
+ */
 var createEmbed = function createEmbed(tracks) {
   var trackIds = R.map(R.compose(R.prop('id'), R.head), tracks);
   var out = '<iframe src="' + getSpotifyEmbedUrl(trackIds) + '" frameborder="0"\n      allowtransparency="true" width="640" height="720"></iframe>';
   return out;
 };
 
-var parseTracklist = R.compose(grabTrackIdsFromSpotify, R.map(extractArtistAndTrack), R.filter(Boolean));
-
-var getTracklist = R.compose(R.split("\n"), R.prop('value'));
 var createPlaylist = R.compose(parseTracklist, getTracklist);
 
-// Export public entry point but also a couple of methods that need unit tests.
+/**
+ * Export public entry point but also a couple of methods that I want to unit test.
+ */
 module.exports = {
   createPlaylist: createPlaylist,
   createEmbed: createEmbed,

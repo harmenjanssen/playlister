@@ -8,8 +8,7 @@ const getSpotifyEmbedRootUrl = function() {
 };
 
 const getSpotifyEmbedUrl = function(trackIds) {
-  return getSpotifyEmbedRootUrl() +
-    trackIds.join(',');
+  return getSpotifyEmbedRootUrl() + trackIds.join(',');
 };
 
 const getTracknumberingRegexp = function() { return /^\[?\d+(\.|\])?/; };
@@ -17,7 +16,7 @@ const getSuffixRegexp = function() { return /(\(|\[)([^\)\]]+)(\)|\])$/; };
 const getLastDashRegexp = function() { return /^(\s?-)/; };
 
 const tracklistLooksLikeAList = function(tracks) {
-  return R.filter(track => getTracknumberingRegexp().test(track), tracks).length === tracks.length;
+  return R.filter(R.test(getTracknumberingRegexp()), tracks).length === tracks.length;
 };
 
 const removeCruftFromTrack = R.compose(R.trim,
@@ -59,26 +58,7 @@ const grabTrackIdsFromSpotify = function(tracks) {
         }))
     );
   }, tracks);
-  if (5 < 19) {
-    return Promise.all(promises).then(R.filter(R.length))
-  }
-
-  return Promise.all(R.map(spotifyApi.searchTracks, R.map(artistAndTrackToSpotifyQuery, tracks)))
-    .then(R.filter(track => track.tracks.items.length))
-    .then(R.map(R.compose(R.prop('items'), R.prop('tracks'))))
-    // somewhere around here: sort 'items' by literal match
-    .then(R.map(R.sort((a, b) => {
-
-
-    })))
-    .then(R.map(R.compose(R.prop('id'), R.head)))
-};
-
-const createEmbed = function(tracks) {
-  let trackIds = R.map(R.compose(R.prop('id'), R.head), tracks);
-  let out = `<iframe src="${getSpotifyEmbedUrl(trackIds)}" frameborder="0"
-      allowtransparency="true" width="640" height="720"></iframe>`;
-  return out;
+  return Promise.all(promises).then(R.filter(R.length))
 };
 
 const parseTracklist = R.compose(grabTrackIdsFromSpotify,
@@ -86,9 +66,23 @@ const parseTracklist = R.compose(grabTrackIdsFromSpotify,
                  R.filter(Boolean));
 
 const getTracklist   = R.compose(R.split("\n"), R.prop('value'));
+
+/**
+ * Main API
+ */
+const createEmbed = function(tracks) {
+  let trackIds = R.map(R.compose(R.prop('id'), R.head), tracks);
+  let out = `<iframe src="${getSpotifyEmbedUrl(trackIds)}" frameborder="0"
+      allowtransparency="true" width="640" height="720"></iframe>`;
+  return out;
+};
+
 const createPlaylist = R.compose(parseTracklist, getTracklist);
 
-// Export public entry point but also a couple of methods that need unit tests.
+
+/**
+ * Export public entry point but also a couple of methods that I want to unit test.
+ */
 module.exports = {
   createPlaylist,
   createEmbed,
