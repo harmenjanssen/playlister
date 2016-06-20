@@ -1,7 +1,17 @@
 'use strict';
+/**
+ * -----------------------------------------------------------------------------------------
+ * Helpful libraries
+ * -----------------------------------------------------------------------------------------
+ */
 const R = require('ramda');
 const Spotify = require('spotify-web-api-js');
 
+/**
+ * -----------------------------------------------------------------------------------------
+ * Utility functions
+ * -----------------------------------------------------------------------------------------
+ */
 const getSpotifyEmbedRootUrl = function() {
   return 'https://embed.spotify.com/' +
     '?theme=dark&view=list&uri=spotify:trackset:tracklister:';
@@ -20,13 +30,15 @@ const tracklistLooksLikeAList = function(tracks) {
 };
 
 const removeCruftFromTrack = R.compose(R.trim,
-                     R.replace(getSuffixRegexp(), ''),
-                     R.replace(getLastDashRegexp(), ''),
-                     R.replace(getTracknumberingRegexp(), ''));
+                                       R.replace(getSuffixRegexp(), ''),
+                                       R.replace(getTracknumberingRegexp(), ''));
 
 const extractArtistAndTrack = function(track) {
+  track = removeCruftFromTrack(track);
   let lastDash = R.lastIndexOf('-', track);
-  let trackObj = R.map(removeCruftFromTrack, R.splitAt(lastDash, track));
+  // Split into track and artist, and clean up track since it will contain the dash.
+  let trackObj = R.map(R.compose(R.trim, R.replace(getLastDashRegexp(), '')),
+                       R.splitAt(lastDash, track));
   trackObj = R.zipObj(['artist', 'track'], trackObj);
   return trackObj;
 };
@@ -68,7 +80,9 @@ const parseTracklist = R.compose(grabTrackIdsFromSpotify,
 const getTracklist   = R.compose(R.split("\n"), R.prop('value'));
 
 /**
+ * -----------------------------------------------------------------------------------------
  * Main API
+ * -----------------------------------------------------------------------------------------
  */
 const createEmbed = function(tracks) {
   let trackIds = R.map(R.compose(R.prop('id'), R.head), tracks);
@@ -81,7 +95,9 @@ const createPlaylist = R.compose(parseTracklist, getTracklist);
 
 
 /**
+ * -----------------------------------------------------------------------------------------
  * Export public entry point but also a couple of methods that I want to unit test.
+ * -----------------------------------------------------------------------------------------
  */
 module.exports = {
   createPlaylist,
