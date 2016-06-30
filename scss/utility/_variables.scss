@@ -1,0 +1,73 @@
+/* ==========================================================================
+   variables
+   ========================================================================== */
+
+// COLORS (base)
+$black: #222;
+$white: #ffffff;
+$spotifyGreen: #23CF5F; // not really but fuck it
+
+$red: #f00;
+$blue: #00f;
+
+$textColor: $black;
+
+$primaryColor: $red;
+$secondaryColor: $blue;
+
+$themes: (
+	$primaryColor,
+	$secondaryColor,
+);
+
+$themesMap: (
+	primary: $primaryColor,
+	secondary: $secondaryColor,
+);
+
+// FONTS
+$fontSizesSmall: (
+	h1: 38px,
+	h2: 32px,
+	h3: 20px,
+	body: 19px
+);
+
+$fontSizesMedium: (
+	h1: 57px,
+	h2: 42px,
+	h3: 32px,
+	body: 19px
+);
+
+$fontSizesLarge: (
+);
+
+$defaultLineHeight: 1.5;
+
+$bodyFont: "Myriad Pro", Myriad, Helvetica, Arial, Verdana, sans-serif;
+$headingFont: sans-serif;
+
+
+// WIDTHS & SIZES
+$siteWidth: 1020;
+
+/*
+ * z-index
+ * for stacking stuff
+ *
+ * define the stacking order for modules here
+ * within a module you should define it via
+ * the $module-z-index variable
+ */
+$z-index: (
+);
+
+// BREAKPOINTS
+// The following is inspired by this article: http://css-tricks.com/media-queries-sass-3-2-and-codekit/
+$small: 540;
+$medium: 680;
+$mediumLarge: 900;
+$large: 1200;
+$extraLarge: 1400;
+$huge: 1700;

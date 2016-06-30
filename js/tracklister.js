@@ -61,7 +61,7 @@ const grabTrackIdsFromSpotify = function(tracks) {
   let promises = [];
   R.forEach(track => {
     promises.push(
-      spotifyApi.searchTracks(artistAndTrackToSpotifyQuery(track))
+      R.memoize(spotifyApi.searchTracks)(artistAndTrackToSpotifyQuery(track))
         .then(R.compose(R.prop('items'), R.prop('tracks')))
         .then(R.sort((a, b) => {
           // Sort literal matches on top
@@ -77,7 +77,7 @@ const parseTracklist = R.compose(grabTrackIdsFromSpotify,
                  R.map(extractArtistAndTrack),
                  R.filter(Boolean));
 
-const getTracklist   = R.compose(R.split("\n"), R.prop('value'));
+const getTracklist = R.compose(R.map(R.trim), R.split("\n"), R.prop('value'));
 
 /**
  * -----------------------------------------------------------------------------------------
@@ -92,7 +92,6 @@ const createEmbed = function(tracks) {
 };
 
 const createPlaylist = R.compose(parseTracklist, getTracklist);
-
 
 /**
  * -----------------------------------------------------------------------------------------

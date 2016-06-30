@@ -26,7 +26,6 @@ gulp.task('html', function () {
 
 gulp.task('css', function () {
     gulp.src('./scss/**/*.scss')
-        .pipe($.scssLint().on('error', $.sass.logError))
         .pipe($.sass()).on('error', $.sass.logError)
         .pipe($.postcss([ autoprefixer({ browsers: ['last 2 versions'] }) ]))
         .pipe($.minifyCss({compatibility: 'ie10'}))

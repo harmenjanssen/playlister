@@ -81,7 +81,7 @@ var grabTrackIdsFromSpotify = function grabTrackIdsFromSpotify(tracks) {
 
   var promises = [];
   R.forEach(function (track) {
-    promises.push(spotifyApi.searchTracks(artistAndTrackToSpotifyQuery(track)).then(R.compose(R.prop('items'), R.prop('tracks'))).then(R.sort(function (a, b) {
+    promises.push(R.memoize(spotifyApi.searchTracks)(artistAndTrackToSpotifyQuery(track)).then(R.compose(R.prop('items'), R.prop('tracks'))).then(R.sort(function (a, b) {
       // Sort literal matches on top
       return undefined === findLiteralMatch(track, a) ? -1 : undefined === findLiteralMatch(track, b) ? 1 : 0;
     })));
@@ -91,7 +91,7 @@ var grabTrackIdsFromSpotify = function grabTrackIdsFromSpotify(tracks) {
 
 var parseTracklist = R.compose(grabTrackIdsFromSpotify, R.map(extractArtistAndTrack), R.filter(Boolean));
 
-var getTracklist = R.compose(R.split("\n"), R.prop('value'));
+var getTracklist = R.compose(R.map(R.trim), R.split("\n"), R.prop('value'));
 
 /**
  * -----------------------------------------------------------------------------------------
