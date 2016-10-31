@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="880px" height="506px" viewBox="0 0 880 506" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.3 (33839) - http://www.bohemiancoding.com/sketch -->
+    <title>logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#02003B" offset="0%"></stop>
+            <stop stop-color="#414F5D" offset="100%"></stop>
+        </linearGradient>
+        <radialGradient cx="50%" cy="33.7702537%" fx="50%" fy="33.7702537%" r="50.0546962%" id="radialGradient-2">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+        <text id="text-3" font-family="Intro-Inline, Intro Inline" font-size="64" font-weight="normal" fill="#FFFFFF">
+            <tspan x="205" y="226">TRACKLISTER</tspan>
+        </text>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" fill="url(#linearGradient-1)" x="0" y="23" width="880" height="250"></rect>
+        <polygon id="Triangle" fill="url(#radialGradient-2)" transform="translate(382.886362, 254.060837) rotate(157.000000) translate(-382.886362, -254.060837) " points="382.886362 31.0608368 448.886362 477.060837 316.886362 477.060837"></polygon>
+        <polygon id="Triangle" fill="url(#radialGradient-2)" transform="translate(489.680520, 273.480725) rotate(198.000000) translate(-489.680520, -273.480725) " points="489.68052 50.4807248 555.68052 496.480725 423.68052 496.480725"></polygon>
+        <polygon id="Triangle" fill="url(#radialGradient-2)" transform="translate(431.680520, 225.480725) rotate(182.000000) translate(-431.680520, -225.480725) " points="431.68052 2.48072476 497.68052 448.480725 365.68052 448.480725"></polygon>
+        <g id="TRACKLISTER" opacity="0.795417444" fill-opacity="1" fill="#FFFFFF">
+            <use filter="url(#filter-4)" xlink:href="#text-3"></use>
+            <use xlink:href="#text-3"></use>
+        </g>
+        <path d="" id="Path-2" stroke="#979797"></path>
+    </g>
+</svg>

@@ -33,6 +33,7 @@
     "watchify": "^3.4.0"
   },
   "dependencies": {
+    "gulp-file-include": "^1.0.0",
     "ramda": "^0.17.1",
     "spotify-web-api-js": "^0.15.0"
   }

@@ -54,8 +54,12 @@ main {
 }
 
 header {
-    padding: 10px 0;
-    background: $spotifyGreen;
+    background: #02003b;
+    background: linear-gradient(to bottom, #02003b 0%,#414f5d 100%);
+}
+
+.header__logo {
+    display: block; margin: 0 auto;
 }
 
 textarea {

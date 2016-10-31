@@ -8,11 +8,12 @@ var gulp            = require('gulp'),
     buffer          = require('vinyl-buffer'),
     assign          = require('lodash.assign'),
     del             = require('del'),
+    fileinclude     = require('gulp-file-include'),
     sync            = require('browser-sync');
 
 gulp.task('default', ['clean', 'html', 'sync', 'css'], function () {
     gulp.watch('./scss/*.scss', ['css']);
-    gulp.watch('./*.html', ['html']);
+    gulp.watch(['./*.html', './includes/*'], ['html']);
 });
 
 gulp.task('clean', function () {
@@ -21,7 +22,11 @@ gulp.task('clean', function () {
 
 gulp.task('html', function () {
     gulp.src('./index.html')
-    .pipe(gulp.dest('./dist/'));
+      .pipe(fileinclude({
+        prefix: '@@',
+        basepath: '@file'
+      }))
+      .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('css', function () {
