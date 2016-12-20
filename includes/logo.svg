@@ -1,20 +1,19 @@
 <svg class="header__logo"
-    width="880" height="250"
-    viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    width="360" height="250"
+    viewBox="0 0 360 250" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <title>
     Tracklister
   </title>
   <defs>
     <path id="myTextPath"
-            d="M55,226
-                a1,1 0 0,1 305,226" />
+            d="M50,226
+                A1,1 0 0,1 305,226" />
     <radialGradient cy="33.77%" fx="50%" fy="33.77%" r="50.055%" id="b">
       <stop stop-color="#FFF" offset="0%"/>
       <stop stop-color="#FFF" stop-opacity="0" offset="100%"/>
     </radialGradient>
-    <text id="d" font-family="Intro-Inline, Intro Inline" font-size="64" fill="#FFF"
-        x="205" y="226">
-        <textPath xlink:href="#myTextPath">
+    <text id="d" font-family="Intro-Inline, Intro Inline" font-size="54" fill="#FFF">
+        <textPath xlink:href="#myTextPath" text-anchor="middle" startOffset="50%">
             TRACKLISTER
         </textPath>
     </text>

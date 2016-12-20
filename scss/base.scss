@@ -2,6 +2,10 @@
 @import 'utility/mixins';
 @import 'utility/variables';
 
+$primaryColor: #91CB3E;
+$secondaryColor: #ACEB98;
+$backgroundColor: #2A2B2E; // #FFBAE4;
+
 html {
 	box-sizing: border-box; font-size: 62.5%; line-height: 1.4;
 	-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
@@ -10,9 +14,19 @@ html {
 *, *::before, *::after { box-sizing: inherit; }
 
 body {
-	background: #fff; margin: 0;
+	margin: 0;
 	font-family: $bodyFont; font-weight: normal;
-	font-size: map-get($fontSizesSmall, body); color: $black;
+	font-size: map-get($fontSizesSmall, body);
+    background: $backgroundColor; color: $white;
+
+    background-color:black;
+background-image:
+radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
 }
 
 /*
@@ -49,13 +63,16 @@ p {
 main {
     @include bp-min($small) {
         width: 50%;
-        margin: 20px auto;
+        margin: 20px auto 100px;
     }
+    padding: 2em;
+    background: $primaryColor;
+    box-shadow: inset 0 3px 20px $secondaryColor, inset 0 1px 1px #FFFFFF;
+    border-radius: 20px;
 }
 
 header {
-    background: #02003b;
-    background: linear-gradient(to bottom, #02003b 0%,#414f5d 100%);
+    margin-top: 40px;
 }
 
 .header__logo {
@@ -67,8 +84,25 @@ textarea {
     display: block;
 }
 
-h1 {
-    text-transform: uppercase;
+h1.one {
+    // @see https://codemyviews.com/blog/inner-shadows-in-css-images-text-and-beyond
+    // for inset text-shadow trick
+    margin: 4rem;
     text-align: center;
-    color: $white;
+    font-weight: normal;
+    font-family: 'Raleway', cursive; font-size: 120px;
+    background: $secondaryColor; color: transparent;
+    border-bottom: 1px solid #87FF65;
+    text-shadow: 0 2px 0px #87FF65, // $primaryColor,
+                 0 0 4px #fff;
+    -webkit-background-clip: text;
+       -moz-background-clip: text;
+            background-clip: text;
+}
+
+h1 {
+    text-align: center;
+    font-weight: normal;
+    font-family: 'Raleway', cursive; font-size: 80px;
+    color: $primaryColor;
 }
