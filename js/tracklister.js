@@ -56,9 +56,8 @@ const findLiteralMatch = (query, trackResult) => {
 };
 
 const grabTrackIdsFromSpotify = function(tracks) {
-  let spotifyApi = new Spotify();
-
-  let promises = [];
+  const spotifyApi = new Spotify();
+  const promises = [];
   R.forEach(track => {
     promises.push(
       R.memoize(spotifyApi.searchTracks)(artistAndTrackToSpotifyQuery(track))
@@ -84,11 +83,15 @@ const getTracklist = R.compose(R.map(R.trim), R.split("\n"), R.prop('value'));
  * Main API
  * -----------------------------------------------------------------------------------------
  */
-const createEmbed = function(tracks) {
-  let trackIds = R.map(R.compose(R.prop('id'), R.head), tracks);
-  let out = `<iframe src="${getSpotifyEmbedUrl(trackIds)}" frameborder="0"
-      allowtransparency="true" width="640" height="720"></iframe>`;
-  return out;
+const createEmbed = (tracks) => {
+  const trackIds = R.map(R.compose(R.prop('id'), R.head), tracks);
+  const iframe = document.createElement('iframe');
+  iframe.setAttribute('src', getSpotifyEmbedUrl(trackIds));
+  iframe.setAttribute('frameborder', '0');
+  iframe.setAttribute('allowtransparency', 'true');
+  iframe.setAttribute('width', 640);
+  iframe.setAttribute('height', 720);
+  return iframe;
 };
 
 const createPlaylist = R.compose(parseTracklist, getTracklist);

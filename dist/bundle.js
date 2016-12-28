@@ -10,7 +10,10 @@ createBtn.addEventListener('click', function (e) {
 	e.preventDefault();
 	tracklister.createPlaylist(tracklistTxt).then(function (tracks) {
 		var iframe = tracklister.createEmbed(tracks);
-		document.querySelector('#embed-container').innerHTML = iframe;
+		iframe.addEventListener('load', function () {
+			document.querySelector('.main-app').classList.toggle('has-results');
+		});
+		document.querySelector('#embed-container').appendChild(iframe);
 	});
 });
 
@@ -78,7 +81,6 @@ var findLiteralMatch = function findLiteralMatch(query, trackResult) {
 
 var grabTrackIdsFromSpotify = function grabTrackIdsFromSpotify(tracks) {
   var spotifyApi = new Spotify();
-
   var promises = [];
   R.forEach(function (track) {
     promises.push(R.memoize(spotifyApi.searchTracks)(artistAndTrackToSpotifyQuery(track)).then(R.compose(R.prop('items'), R.prop('tracks'))).then(R.sort(function (a, b) {
@@ -100,8 +102,13 @@ var getTracklist = R.compose(R.map(R.trim), R.split("\n"), R.prop('value'));
  */
 var createEmbed = function createEmbed(tracks) {
   var trackIds = R.map(R.compose(R.prop('id'), R.head), tracks);
-  var out = '<iframe src="' + getSpotifyEmbedUrl(trackIds) + '" frameborder="0"\n      allowtransparency="true" width="640" height="720"></iframe>';
-  return out;
+  var iframe = document.createElement('iframe');
+  iframe.setAttribute('src', getSpotifyEmbedUrl(trackIds));
+  iframe.setAttribute('frameborder', '0');
+  iframe.setAttribute('allowtransparency', 'true');
+  iframe.setAttribute('width', 640);
+  iframe.setAttribute('height', 720);
+  return iframe;
 };
 
 var createPlaylist = R.compose(parseTracklist, getTracklist);

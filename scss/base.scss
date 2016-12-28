@@ -1,108 +1,152 @@
 @import 'utility/functions';
 @import 'utility/mixins';
-@import 'utility/variables';
 
-$primaryColor: #91CB3E;
-$secondaryColor: #ACEB98;
-$backgroundColor: #2A2B2E; // #FFBAE4;
+$primaryColor: #1ed760;
+$secondaryColor: #FC9E4F;
+$backgroundColor: #181818;
+
+$lineHeight: 1.5;
+
+$small: 860;
+$large: 1020;
 
 html {
-	box-sizing: border-box; font-size: 62.5%; line-height: 1.4;
+	box-sizing: border-box; font-size: 1.2em; line-height: $lineHeight;
 	-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
 
-*, *::before, *::after { box-sizing: inherit; }
-
-body {
-	margin: 0;
-	font-family: $bodyFont; font-weight: normal;
-	font-size: map-get($fontSizesSmall, body);
-    background: $backgroundColor; color: $white;
-
-    background-color:black;
-background-image:
-radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
-radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
-background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
-background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
-}
-
-/*
- * Forms
- */
-button, input, select, textarea {
-	color: $black;
-	font-family: $bodyFont; font-weight: normal;
-	font-size: map-get($fontSizesSmall, body);
-}
-
-
-/*
- * Links
- */
-a:hover, a:focus {
-	outline: 0; vertical-align: baseline;
-	-webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove the blue tap-highlight on mobile */
-}
-
-
-/*
- * Typography
- */
-p {
-	margin-top: 0; margin-bottom: $defaultLineHeight + em;
-}
-
-* {
+*, *::before, *::after {
+    box-sizing: inherit;
     margin: 0;
     padding: 0;
 }
 
+body {
+	margin: 0;
+	font-family: Raleway, sans-serif;
+    background: $backgroundColor; color: #FFF;
+}
+
+button, input, select, textarea {
+	color: $secondaryColor;
+	font-size: 100%;
+	font-family: Raleway, sans-serif; font-weight: normal;
+}
+
+a:link, a:visited, a:hover, a:active {
+    text-decoration: underline; color: $secondaryColor;
+}
+
+a:hover, a:focus {
+    text-decoration: none;
+}
+
+p {
+	margin-top: 0; margin-bottom: $lineHeight + em;
+}
+
+iframe {
+    max-width: 100%;
+}
+
 main {
+    width: 90%;
+    margin: 0 auto 2em;
     @include bp-min($small) {
         width: 50%;
-        margin: 20px auto 100px;
     }
-    padding: 2em;
-    background: $primaryColor;
-    box-shadow: inset 0 3px 20px $secondaryColor, inset 0 1px 1px #FFFFFF;
-    border-radius: 20px;
+    padding: $lineHeight + em;
+    background: $primaryColor; color: $backgroundColor;
+    border-radius: 20px; box-shadow: 0 5px 0 #FC9E4F;
+
+    a:link, a:visited, a:hover, a:active {
+        color: $backgroundColor;
+    }
 }
 
 header {
-    margin-top: 40px;
+    margin-top: 2em;
 }
 
-.header__logo {
-    display: block; margin: 0 auto;
+h1 {
+    margin-bottom: 1em;
+    text-align: center; text-transform: lowercase;
+    font-weight: normal;
+    font-family: 'Raleway', cursive; font-size: 1.875rem;
+    color: $primaryColor; color: $secondaryColor;
+}
+
+footer {
+    margin-bottom: 3em;
+    text-align: center; font-size: .8em;
+    text-transform: lowercase;
 }
 
 textarea {
     width: 100%;
     display: block;
+    margin-bottom: $lineHeight + em; padding: $lineHeight + em;
+    //font-family: monospace;
+    background: $backgroundColor; color: $secondaryColor;
+    border-radius: 20px; border: 3px solid $backgroundColor;
 }
 
-h1.one {
-    // @see https://codemyviews.com/blog/inner-shadows-in-css-images-text-and-beyond
-    // for inset text-shadow trick
-    margin: 4rem;
-    text-align: center;
-    font-weight: normal;
-    font-family: 'Raleway', cursive; font-size: 120px;
-    background: $secondaryColor; color: transparent;
-    border-bottom: 1px solid #87FF65;
-    text-shadow: 0 2px 0px #87FF65, // $primaryColor,
-                 0 0 4px #fff;
-    -webkit-background-clip: text;
-       -moz-background-clip: text;
-            background-clip: text;
+textarea:focus {
+    outline: none;
+    border-color: $secondaryColor;
 }
 
-h1 {
-    text-align: center;
-    font-weight: normal;
-    font-family: 'Raleway', cursive; font-size: 80px;
-    color: $primaryColor;
+button {
+    margin: 0 auto $lineHeight + em;
+    display: block; padding: 10px 30px;
+    text-align: center; text-transform: lowercase;
+    background: $backgroundColor; color: $secondaryColor;
+    border-radius: 10px; border: 0;
+    cursor: pointer; box-shadow: 0 5px 0 #FC9E4F
+}
+
+button:hover, button:focus {
+    background: $secondaryColor; color: $backgroundColor;
+}
+
+.main-app {
+	position: relative;
+}
+
+/** Front side */
+.main-app__front {
+	z-index: 1; position: relative;
+}
+
+.has-results .main-app__front {
+	transform: rotateY(-180deg);
+	@include bp-min($large) {
+		transform: rotateX(180deg);
+	}
+	display: none;
+}
+
+/** Back side */
+.main-app__front,
+.main-app__back {
+	transform-style: preserve-3d; backface-visibility: hidden;
+	transition: transform .2s ease-out;
+}
+
+.main-app__back {
+	z-index: 2;
+	width: 100%; height: 100%;
+	transform: rotateY(-180deg);
+	@include bp-min($large) {
+		transform: rotateX(-180deg);
+	}
+	display: none;
+}
+
+.has-results .main-app__back {
+	transform: rotateY(0deg);
+	@include bp-min($large) {
+		transform: rotateX(0deg);
+	}
+	display: block;
 }

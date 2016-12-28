@@ -1,13 +1,16 @@
 const tracklister = require('./tracklister.js');
 
-let createBtn = document.querySelector('.create-playlists-btn');
-let tracklistTxt = document.querySelector('.tracklist-txt');
+const createBtn    = document.querySelector('.create-playlists-btn');
+const tracklistTxt = document.querySelector('.tracklist-txt');
 
 createBtn.addEventListener('click', e => {
 	e.preventDefault();
 	tracklister.createPlaylist(tracklistTxt)
-		.then(tracks => {
-			let iframe = tracklister.createEmbed(tracks);
-			document.querySelector('#embed-container').innerHTML = iframe;
-		});
+	.then(tracks => {
+		const iframe = tracklister.createEmbed(tracks);
+    iframe.addEventListener('load', () => {
+      document.querySelector('.main-app').classList.toggle('has-results');
+    });
+		document.querySelector('#embed-container').appendChild(iframe);
+	});
 });
