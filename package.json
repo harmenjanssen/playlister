@@ -1,40 +1,53 @@
 {
-  "name": "Tracklister",
+  "name": "Playlister",
   "version": "0.1.0",
-  "description": "Tracklist to Spotify",
+  "description": "Transform tracklist to Spotify playlist",
   "scripts": {
-    "start": "gulp",
-    "test": "tape tests/test.js | tap-spec"
+    "test": "tape tests/test.js | tap-spec",
+    "clean": "rm -r dist/*",
+    "build:js": "browserify src/js/app.js | uglifyjs -o dist/app.js",
+    "build:css": "node-sass src/scss/base.scss | cleancss -o dist/base.css",
+    "build:html": "cp src/index.html dist/",
+    "build": "npm run clean && npm run build:html && npm run build:css && npm run build:js",
+    "watch:js": "watch 'npm run build:js' src/js",
+    "watch:css": "watch 'npm run build:css' src/scss",
+    "watch:html": "watch 'npm run build:html' src/",
+    "watch": "parallelshell 'npm run watch:js' 'npm run watch:css' 'npm run watch:html'",
+    "serve": "http-server -p 9090 dist/",
+    "live-reload": "live-reload --port 9091 dist/",
+    "start": "npm run serve",
+    "open:dev": "opener http://localhost:9090",
+    "dev": "npm run open:dev -s; parallelshell 'npm run live-reload -s' 'npm run serve -s' 'npm run watch -s'"
   },
   "author": "Harmen Janssen",
   "license": "CC0-1.0",
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
+  },
   "devDependencies": {
-    "autoprefixer": "^6.0.3",
-    "babelify": "^6.3.0",
-    "browser-sync": "^2.9.10",
-    "browserify": "^11.2.0",
-    "del": "^2.0.2",
-    "gulp": "^3.9.0",
-    "gulp-load-plugins": "^1.0.0-rc.1",
-    "gulp-minify-css": "^1.2.1",
-    "gulp-plumber": "^1.0.1",
-    "gulp-postcss": "^6.0.1",
-    "gulp-sass": "^2.1.1",
-    "gulp-scss-lint": "^0.3.6",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-streamify": "^1.0.2",
-    "gulp-uglify": "^1.4.1",
-    "gulp-util": "^3.0.6",
-    "lodash.assign": "^3.2.0",
-    "tap-spec": "^4.1.1",
-    "tape": "^4.2.2",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.4.0"
+    "babel-preset-es2015": "^6.24.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.1.0",
+    "uglifyjs": "^2.4.10"
   },
   "dependencies": {
-    "gulp-file-include": "^1.0.0",
+    "clean-css-cli": "^4.0.10",
+    "http-server": "^0.9.0",
+    "live-reload": "^1.1.0",
+    "node-sass": "^4.5.2",
+    "opener": "^1.4.3",
+    "parallelshell": "^2.0.0",
     "ramda": "^0.17.1",
-    "spotify-web-api-js": "^0.15.0"
+    "spotify-web-api-js": "^0.15.0",
+    "watch": "^1.0.2"
   }
 }
