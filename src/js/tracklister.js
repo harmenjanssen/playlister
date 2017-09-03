@@ -20,7 +20,7 @@ const getSpotifyEmbedUrl = trackIds => {
 };
 
 const getTracknumberingRegexp = () => /^\[?\d+(\.|\])?/;
-const getSuffixRegexp = /(\(|\[)([^\)\]]+)(\)|\])$/;
+const getSuffixRegexp = () => /(\(|\[)([^\)\]]+)(\)|\])$/;
 const getLastDashRegexp = () => /^(\s?-)/;
 
 const tracklistLooksLikeAList = tracks =>
