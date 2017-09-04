@@ -1,26 +1,11 @@
 /**
  * -----------------------------------------------------------------------------------------
  * Fantasy Land type helpers
- * Mostly taken from https://github.com/MostlyAdequate/mostly-adequate-guide
+ * Inspired greatly by
+ * - https://github.com/MostlyAdequate/mostly-adequate-guide
+ * - http://www.tomharding.me/2016/12/31/yippee-ki-yay-other-functors/
  * -----------------------------------------------------------------------------------------
  */
-const R = require("ramda");
-
-/**
- * Identity
- */
-const Identity = x => ({
-  // Transform the inner value
-  // map :: Identity a ~> (a -> b) -> Identity b
-  map: f => Identity(f(x)),
-
-  // Get the inner value
-  // fold :: Identity a ~> (a -> b) -> b
-  fold: f => f(x),
-
-  // toString :: Identity a ~> String
-  toString: () => `Identity(${x})`
-});
 
 /**
  * Maybe
@@ -52,7 +37,9 @@ const Nothing = {
 };
 
 // maybe :: ?a -> Maybe a
-const maybe = x => x != null && x !== undefined ? Just(x) : Nothing;
+const maybe = x => {
+  return x != null && x !== undefined ? Just(x) : Nothing;
+};
 
 /**
  * Either
@@ -84,14 +71,16 @@ const Left = x => ({
 });
 
 // either :: (a, ?b) -> Either a b
-const either = (d, x) => x !== null && x !== undefined ? Right(x) : Left(d);
+const either = (d, x) => {
+  return x !== null && x !== undefined ? Right(x) : Left(d);
+};
 
 /**
  * IO
  */
 const IO = f => ({
   // map :: IO a b ~> (b -> c) -> IO a c
-  map: f => IO(R.compose(g, f)),
+  map: g => IO(R.compose(g, f)),
 
   // fold :: IO a b ~> (b -> c) -> (a -> c)
   fold: g => R.compose(g, f),
@@ -100,13 +89,4 @@ const IO = f => ({
   toString: () => `IO(${f})`
 });
 
-/**
- * Task
- */
-const Task = f => ({
-  // fold :: Task ~> (
-  fold: (g, h) =>
-    Task()
-    //(reject, resolve) => {
-    //f(
-});
+module.exports = { Identity, Just, Nothing, maybe, either, Right, Left, IO };
