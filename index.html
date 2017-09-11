@@ -17,13 +17,15 @@
 
         <div class="main-app">
             <div class="main-app__front">
-	            <textarea autofocus class="tracklist-txt" cols="70" rows="20">
-Electric Lazyland - 9 Lazy 9
-Cat People - Cujo
-Amon Tobin - At The End Of The Day
-Registrarse - Luke vibert
-Marvin Gaye - Sexual Healing</textarea>
-	            <button class="create-playlists-btn">Create playlist</button>
+	            <form method="post" action="" class="main-form">
+	                <textarea autofocus class="tracklist-txt" cols="70" rows="20" name="tracklist">
+    Electric Lazyland - 9 Lazy 9
+    Cat People - Cujo
+    Amon Tobin - At The End Of The Day
+    Registrarse - Luke vibert
+    Marvin Gaye - Sexual Healing</textarea>
+	                <button type="submit" class="create-playlists-btn">Create playlist</button>
+                </form>
             </div>
             <div class="main-app__back">
 	            <div id="embed-container"></div>

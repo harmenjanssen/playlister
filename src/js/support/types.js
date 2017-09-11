@@ -1,6 +1,6 @@
 /**
  * -----------------------------------------------------------------------------------------
- * Fantasy Land type helpers
+ * Fantasy Land types
  * Inspired greatly by
  * - https://github.com/MostlyAdequate/mostly-adequate-guide
  * - http://www.tomharding.me/2016/12/31/yippee-ki-yay-other-functors/
@@ -10,7 +10,7 @@
 /**
  * Maybe
  */
-const Just = x => ({
+export const Just = x => ({
   // Transform the inner value
   // map :: Maybe a ~> (a -> b) -> Maybe b
   map: f => Just(f(x)),
@@ -23,7 +23,7 @@ const Just = x => ({
   toString: () => `Just(${x})`
 });
 
-const Nothing = {
+export const Nothing = {
   // Do nothing
   // map :: Maybe a ~> (a -> b) -> Maybe b
   map: f => Nothing,
@@ -36,15 +36,10 @@ const Nothing = {
   toString: () => `Nothing(${x})`
 };
 
-// maybe :: ?a -> Maybe a
-const maybe = x => {
-  return x != null && x !== undefined ? Just(x) : Nothing;
-};
-
 /**
  * Either
  */
-const Right = x => ({
+export const Right = x => ({
   // Transform the inner value
   // map :: Either a b ~> (b -> c) -> Either a c
   map: f => Right(f(x)),
@@ -57,7 +52,7 @@ const Right = x => ({
   toString: () => `Right(${x})`
 });
 
-const Left = x => ({
+export const Left = x => ({
   // Do nothing
   // map :: Either a b ~> (b -> c) -> Either a c
   map: f => Left(x),
@@ -70,23 +65,16 @@ const Left = x => ({
   toString: () => `Left(${x})`
 });
 
-// either :: (a, ?b) -> Either a b
-const either = (d, x) => {
-  return x !== null && x !== undefined ? Right(x) : Left(d);
-};
-
 /**
- * IO
+ * Identity
  */
-const IO = f => ({
-  // map :: IO a b ~> (b -> c) -> IO a c
-  map: g => IO(R.compose(g, f)),
+export const Identity = x => ({
+  // map :: Identity a ~> (a -> b) -> Identity b
+  map: f => Identity(f(x)),
 
-  // fold :: IO a b ~> (b -> c) -> (a -> c)
-  fold: g => R.compose(g, f),
+  // fold :: Identity a ~> (a -> b) -> b
+  fold: f => f(x),
 
-  // toString :: IO a ~> String
-  toString: () => `IO(${f})`
+  // toString :: Identity a ~> String
+  toString: () => `Identity(${x})`
 });
-
-module.exports = { Identity, Just, Nothing, maybe, either, Right, Left, IO };
