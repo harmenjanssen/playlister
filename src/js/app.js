@@ -22,20 +22,20 @@ const renderPlaylist = document =>
     return getIframe(document)(getIframeUrl(tracklistTxt));
   };
 
+// Augh! Impurity!
+// Maybe fix at some point, but it's literally the *only* event listener in the app.
+const formOnSubmit = tap(form => {
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const embed = getIframe(document)(
+      propIn(["target", "children", "tracklist"], e)
+    );
+    document.appendChild(embed);
+  });
+});
+
 const main = document => {
-  $(".main-form").map(
-    tap(form => {
-      // Augh! Impurity!
-      // Maybe fix at some point, but it's literally the *only* event listener in the app.
-      form.addEventListener("submit", e => {
-        e.preventDefault();
-        const embed = getIframe(document)(
-          propIn(["target", "children", "tracklist"], e)
-        );
-        document.appendChild(embed);
-      });
-    })
-  );
+  $(".main-form").map(formOnSubmit);
 };
 
 main(document);

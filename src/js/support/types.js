@@ -7,6 +7,8 @@
  * -----------------------------------------------------------------------------------------
  */
 
+import { identity } from "./util";
+
 /**
  * Maybe
  */
@@ -14,6 +16,11 @@ export const Just = x => ({
   // Transform the inner value
   // map :: Maybe a ~> (a -> b) -> Maybe b
   map: f => Just(f(x)),
+
+  // chain :: Maybe a ~> (a -> b) -> Maybe b
+  chain(f) {
+    return this.map(f).fold(undefined, identity);
+  },
 
   // Get the inner value
   // fold :: Maybe a ~> (b, a -> b) -> b
@@ -28,12 +35,15 @@ export const Nothing = {
   // map :: Maybe a ~> (a -> b) -> Maybe b
   map: f => Nothing,
 
+  // chain :: Maybe a ~> (a -> b) -> Maybe b
+  chain: f => Nothing,
+
   // Return the default value
   // fold :: Maybe a ~> (b, a -> b) -> b
   fold: (d, _) => d,
 
   // toString :: Nothing a ~> String
-  toString: () => `Nothing(${x})`
+  toString: () => `Nothing`
 };
 
 /**

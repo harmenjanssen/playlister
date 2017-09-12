@@ -30,6 +30,5 @@ export const trace = tap(console.log.bind(console));
 export const prop = x => o => maybe(o[x]);
 
 // propIn :: Array -> Object -> Maybe b
-//export const propIn = xs => o => xs.reduce(
-//(acc, cur) => acc.fold(prop(cur)), Just(
-///// ???
+export const propIn = xs =>
+  o => xs.reduce((acc, cur) => acc.chain(prop(cur)), Just(o));
