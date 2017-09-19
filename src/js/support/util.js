@@ -30,5 +30,13 @@ export const trace = tap(console.log.bind(console));
 export const prop = x => o => maybe(o[x]);
 
 // propIn :: Array -> Object -> Maybe b
-export const propIn = xs =>
-  o => xs.reduce((acc, cur) => acc.chain(prop(cur)), Just(o));
+export const propIn = xs => o => xs.reduce((acc, cur) => acc.chain(prop(cur)), Just(o));
+
+// pipe :: [a -> b] -> a -> b
+export const pipe = (...fns) => x => fns.reduce((acc, cur) => cur(acc), x);
+
+// compose :: [a -> b] -> a -> b
+export const compose = (...fns) => x => fns.reduceRight((acc, cur) => cur(acc), x);
+
+// map :: (a -> b) -> F a -> F b
+export const map = fn => F => F.map(fn);

@@ -5,14 +5,19 @@ const getSpotifyEmbedRootUrl = () =>
   "https://embed.spotify.com/?theme=dark&view=list&uri=spotify:trackset:tracklister:";
 
 // createEmbedSrcUrl :: String -> String
-const getIframeUrl = tracklist => {
-  return getSpotifyEmbedRootUrl();
-};
+const getIframeUrl = tracklist =>
+  `${getSpotifyEmbedRootUrl()}${trackListToIds(tracklist).join(",")}`;
 
 // getIframe :: Document -> String -> DOMNode
 const getIframe = doc =>
   src => {
-    return doc.createElement("iframe");
+    const iframe = doc.createElement("iframe");
+    iframe.setAttribute("src", src);
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allowtransparency", "true");
+    iframe.setAttribute("width", 640);
+    iframe.setAttribute("height", 720);
+    return iframe;
   };
 
 // renderPlaylist :: Maybe DOMNode -> String
@@ -27,10 +32,8 @@ const renderPlaylist = document =>
 const formOnSubmit = tap(form => {
   form.addEventListener("submit", e => {
     e.preventDefault();
-    const embed = getIframe(document)(
-      propIn(["target", "children", "tracklist"], e)
-    );
-    document.appendChild(embed);
+    const embed = getIframe(document)(propIn(["target", "children", "tracklist"], e));
+    document.body.appendChild(embed);
   });
 });
 
