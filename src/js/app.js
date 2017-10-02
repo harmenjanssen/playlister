@@ -1,12 +1,5 @@
-import { $, maybe, tap, identity, trace, prop, propIn } from "./support/util";
-
-// getSpotifyEmbedRootUrl :: String
-const getSpotifyEmbedRootUrl = () =>
-  "https://embed.spotify.com/?theme=dark&view=list&uri=spotify:trackset:tracklister:";
-
-// createEmbedSrcUrl :: String -> String
-const getIframeUrl = tracklist =>
-  `${getSpotifyEmbedRootUrl()}${trackListToIds(tracklist).join(",")}`;
+import { $, replace, compose, maybe, tap, identity, trace, prop, propIn } from "./support/util";
+import { getIframeUrl } from "./playlister";
 
 // getIframe :: Document -> String -> DOMNode
 const getIframe = doc =>
@@ -20,25 +13,25 @@ const getIframe = doc =>
     return iframe;
   };
 
-// renderPlaylist :: Maybe DOMNode -> String
+// renderPlaylist :: Maybe DOMNode -> Promise String
 const renderPlaylist = document =>
   tracklist => {
     const tracklistTxt = tracklist.fold(_ => "", prop("value"));
-    return getIframe(document)(getIframeUrl(tracklistTxt));
+    return getIframeUrl(tracklistTxt).then(getIframe(document));
   };
 
 // Augh! Impurity!
 // Maybe fix at some point, but it's literally the *only* event listener in the app.
+// formOnSubmit :: DOMNode -> DOMNode
 const formOnSubmit = tap(form => {
   form.addEventListener("submit", e => {
     e.preventDefault();
-    const embed = getIframe(document)(propIn(["target", "children", "tracklist"], e));
-    document.body.appendChild(embed);
+    renderPlaylist(document)(propIn(["target", "children", "tracklist"])(e)).then(embed =>
+      document.body.appendChild(embed));
   });
 });
 
-const main = document => {
-  $(".main-form").map(formOnSubmit);
-};
+// main :: Document -> DOMNode
+const main = document => $(".main-form").map(formOnSubmit);
 
 main(document);

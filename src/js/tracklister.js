@@ -1,10 +1,11 @@
-"use strict";
+/* eslint-disable */
 /**
  * -----------------------------------------------------------------------------------------
  * Helpful libraries
  * -----------------------------------------------------------------------------------------
  */
-const R = require("ramda");
+//const R = require("ramda");
+const R = {};
 const Spotify = require("spotify-web-api-js");
 
 /**

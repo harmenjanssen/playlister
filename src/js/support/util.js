@@ -40,3 +40,6 @@ export const compose = (...fns) => x => fns.reduceRight((acc, cur) => cur(acc), 
 
 // map :: (a -> b) -> F a -> F b
 export const map = fn => F => F.map(fn);
+
+// replace :: RegExp -> String -> String -> String
+export const replace = re => r => s => s.replace(re, r);
